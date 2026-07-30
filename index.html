@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ストレス・レジリエンスチェック</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(160deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%); min-height: 100vh; padding: 16px; display: flex; align-items: flex-start; justify-content: center; }
+    .container { max-width: 480px; width: 100%; padding-top: 16px; padding-bottom: 40px; }
+    .card { background: white; border-radius: 16px; padding: 28px 24px; box-shadow: 0 4px 24px rgba(0,150,100,0.1); border: 1px solid #c8e6c9; }
+    .step-badge { display: inline-block; background: linear-gradient(135deg,#2e7d32,#66bb6a); color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 0.05em; }
+    h1 { font-size: 1.4rem; font-weight: 900; color: #1b5e20; margin-bottom: 6px; line-height: 1.4; }
+    .desc { font-size: 0.85rem; color: #388e3c; line-height: 1.7; margin-bottom: 20px; }
+    .info-box { background: #f1f8e9; border: 1px solid #c8e6c9; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+    .info-box-title { font-size: 0.78rem; font-weight: 700; color: #2e7d32; margin-bottom: 8px; text-transform: uppercase; }
+    .info-box-body { font-size: 0.83rem; color: #388e3c; line-height: 1.9; }
+    .progress-wrap { margin-bottom: 20px; }
+    .progress-label { font-size: 0.78rem; color: #2e7d32; font-weight: 700; margin-bottom: 6px; }
+    .progress-bar { background: #e8f5e9; border-radius: 2px; height: 6px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg,#2e7d32,#66bb6a); border-radius: 2px; transition: width 0.4s ease; }
+    .question-block { margin-bottom: 16px; border-radius: 10px; padding: 16px; background: #f9fbe7; border: 1px solid #dcedc8; transition: all 0.3s; }
+    .question-block.answered { border-color: #66bb6a; background: #f1f8e9; }
+    .q-num { font-size: 0.72rem; color: #388e3c; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.08em; }
+    .q-text { font-size: 0.95rem; font-weight: 700; color: #1b5e20; line-height: 1.6; margin-bottom: 14px; }
+    .q-reverse { font-size: 0.72rem; color: #e65100; background: #fff3e0; border: 1px solid #ffcc02; border-radius: 4px; padding: 2px 8px; margin-bottom: 8px; display: inline-block; }
+    .options-5, .options-7 { display: flex; flex-direction: column; gap: 7px; }
+    .opt-btn { background: white; border: 1px solid #c8e6c9; border-radius: 8px; padding: 11px 14px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #388e3c; cursor: pointer; transition: all 0.18s; text-align: left; width: 100%; }
+    .opt-btn:hover { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; }
+    .opt-btn.selected { background: linear-gradient(135deg,#2e7d32,#66bb6a); border-color: #66bb6a; color: white; font-weight: 700; }
+    .start-btn { width: 100%; padding: 16px; background: linear-gradient(135deg,#2e7d32,#66bb6a); color: white; border: none; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 20px; transition: all 0.18s; }
+    .start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .result-section { margin-bottom: 20px; }
+    .result-title { font-size: 0.85rem; font-weight: 700; color: #388e3c; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .result-score { font-size: 1.6rem; font-weight: 900; color: #1b5e20; }
+    .result-judge { display: inline-block; padding: 4px 14px; border-radius: 4px; font-size: 0.82rem; font-weight: 700; margin-top: 6px; }
+    .judge-high { background: #e8f5e9; color: #2e7d32; border: 1px solid #66bb6a; }
+    .judge-mid { background: #fff8e1; color: #f57f17; border: 1px solid #ffca28; }
+    .judge-low { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
+    .divider { border: none; border-top: 1px solid #c8e6c9; margin: 20px 0; }
+    .sub-scores { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .sub-score-item { flex: 1; min-width: 80px; background: #f1f8e9; border: 1px solid #c8e6c9; border-radius: 8px; padding: 10px; text-align: center; }
+    .sub-score-label { font-size: 0.7rem; color: #388e3c; font-weight: 700; margin-bottom: 4px; }
+    .sub-score-value { font-size: 1.2rem; font-weight: 900; color: #1b5e20; }
+    .comment-box { background: #f1f8e9; border: 1px solid #c8e6c9; border-radius: 10px; padding: 16px; font-size: 0.88rem; color: #388e3c; line-height: 1.9; white-space: pre-wrap; }
+    .share-box { background: #f1f8e9; border: 1px solid #66bb6a; border-radius: 10px; padding: 16px; margin-top: 16px; }
+    .share-box-title { font-size: 0.82rem; font-weight: 700; color: #2e7d32; margin-bottom: 6px; }
+    .share-box-desc { font-size: 0.78rem; color: #388e3c; margin-bottom: 10px; line-height: 1.6; }
+    .copy-btn { width: 100%; padding: 14px; background: linear-gradient(135deg,#2e7d32,#66bb6a); color: white; border: none; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
+    .copy-msg { font-size: 0.78rem; color: #2e7d32; text-align: center; margin-top: 8px; display: none; }
+    .retry-btn { width: 100%; margin-top: 12px; padding: 14px; background: transparent; color: #2e7d32; border: 1px solid #66bb6a; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.18s; }
+    .retry-btn:hover { background: #f1f8e9; }
+    .note { font-size: 0.75rem; color: #81c784; text-align: center; margin-top: 16px; line-height: 1.6; }
+    .loading-icon { font-size: 3rem; animation: spin 1.2s linear infinite; display: block; margin-bottom: 12px; text-align: center; }
+    @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    .user-badge { background: #f1f8e9; border: 1px solid #66bb6a; border-radius: 8px; padding: 10px 14px; font-size: 0.82rem; color: #2e7d32; font-weight: 700; margin-bottom: 16px; display: none; }
+    .line-btn { width: 100%; padding: 16px; background: #06C755; color: white; border: none; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 12px; transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .line-btn:hover { opacity: 0.9; }
+    .skip-btn { width: 100%; padding: 12px; background: transparent; color: #81c784; border: 1px solid #c8e6c9; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .age-select { width: 100%; padding: 12px; background: white; border: 1px solid #c8e6c9; border-radius: 8px; color: #1b5e20; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; outline: none; cursor: pointer; appearance: none; }
+    .code-wrap { margin-bottom: 16px; }
+    .code-label { font-size: 0.82rem; font-weight: 700; color: #2e7d32; margin-bottom: 6px; display: block; }
+    .code-row { display: flex; gap: 8px; }
+    .code-input { flex: 1; padding: 12px; background: white; border: 1px solid #c8e6c9; border-radius: 8px; color: #1b5e20; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; outline: none; text-transform: uppercase; letter-spacing: 0.1em; }
+    .code-input::placeholder { color: #a5d6a7; text-transform: none; letter-spacing: normal; }
+    .code-input.valid { border-color: #66bb6a; }
+    .code-input.invalid { border-color: #e74c3c; }
+    .code-btn { padding: 12px 16px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .code-btn:hover { background: #66bb6a; }
+    .code-msg { font-size: 0.78rem; margin-top: 6px; }
+    .code-msg.ok { color: #2e7d32; }
+    .code-msg.ng { color: #e74c3c; }
+    .soc-scale { display: flex; gap: 4px; flex-wrap: wrap; }
+    .soc-btn { flex: 1; min-width: 36px; text-align: center; padding: 10px 4px; background: white; border: 1px solid #c8e6c9; border-radius: 6px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; font-weight: 700; color: #388e3c; cursor: pointer; transition: all 0.18s; }
+    .soc-btn:hover { background: #f1f8e9; border-color: #66bb6a; }
+    .soc-btn.selected { background: linear-gradient(135deg,#2e7d32,#66bb6a); border-color: #66bb6a; color: white; }
+    .soc-scale-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: #81c784; margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- TOP -->
+  <div id="screen-top" class="card">
+    <div class="step-badge">STRESS & RESILIENCE CHECK</div>
+    <h1>ストレス・<br>レジリエンスチェック</h1>
+    <p class="desc">BRS（回復力）とSOC（首尾一貫感覚）の2つの指標で、あなたのストレス耐性と回復力を総合的にチェックします。</p>
+    <div class="info-box">
+      <div class="info-box-title">📋 チェックの流れ</div>
+      <div class="info-box-body">
+        STEP 1｜BRS（6問・5段階評価）<br>
+        STEP 2｜SOC（13問・7段階評価）<br>
+        RESULT｜総合判定
+      </div>
+    </div>
+
+    <!-- 年代選択 -->
+    <div style="margin-bottom:16px;">
+      <div style="font-size:0.82rem;font-weight:700;color:#2e7d32;margin-bottom:8px;">📋 年代を選択してください</div>
+      <select id="age-group" class="age-select">
+        <option value="">--- 選択してください ---</option>
+        <option value="20代前半">20代前半（20〜24歳）</option>
+        <option value="20代半ば">20代半ば（25〜27歳）</option>
+        <option value="20代後半">20代後半（28〜29歳）</option>
+        <option value="30代前半">30代前半（30〜34歳）</option>
+        <option value="30代半ば">30代半ば（35〜37歳）</option>
+        <option value="30代後半">30代後半（38〜39歳）</option>
+        <option value="40代前半">40代前半（40〜44歳）</option>
+        <option value="40代半ば">40代半ば（45〜47歳）</option>
+        <option value="40代後半">40代後半（48〜49歳）</option>
+        <option value="50代前半">50代前半（50〜54歳）</option>
+        <option value="50代半ば">50代半ば（55〜57歳）</option>
+        <option value="50代後半">50代後半（58〜59歳）</option>
+        <option value="60代前半">60代前半（60〜64歳）</option>
+        <option value="60代半ば">60代半ば（65〜67歳）</option>
+        <option value="60代後半">60代後半（68〜69歳）</option>
+        <option value="70代前半">70代前半（70〜74歳）</option>
+        <option value="70代半ば">70代半ば（75〜77歳）</option>
+        <option value="70代後半">70代後半（78〜79歳）</option>
+      </select>
+    </div>
+
+    <!-- 企業・参加者コード -->
+    <div class="code-wrap">
+      <span class="code-label">🔑 企業・参加者コード（お持ちの方のみ）</span>
+      <div class="code-row">
+        <input type="text" id="company-code" class="code-input" maxlength="6" placeholder="半角英数字6桁">
+        <button class="code-btn" id="code-check-btn">照合</button>
+      </div>
+      <div class="code-msg" id="code-msg"></div>
+    </div>
+
+    <div class="user-badge" id="user-badge">✅ LINEでログイン済み</div>
+    <button class="start-btn" id="start-btn">チェックを開始する →</button>
+    <button class="line-btn" id="line-login-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.08 1.67 5.77 4.19 7.4L5.5 22l3.79-1.97C10.1 20.63 11.03 21 12 21c5.52 0 10-4.03 10-9s-4.48-9-10-9z"/></svg>
+      LINEでログインして記録を残す
+    </button>
+    <button class="skip-btn" id="skip-btn">ログインせずに始める</button>
+    <p class="note">※このチェックは医療診断ではありません。</p>
+  </div>
+
+  <!-- BRS -->
+  <div id="screen-brs" class="card" style="display:none">
+    <div class="step-badge">STEP 1 / 2 — BRS（回復力）</div>
+    <h1>BRSスコア</h1>
+    <p class="desc">各項目についてあてはまる程度を5段階で選択してください。</p>
+    <div class="progress-wrap">
+      <div class="progress-label" id="brs-progress-label">ANSWERED 0 / 6</div>
+      <div class="progress-bar"><div class="progress-fill" id="brs-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div id="brs-questions"></div>
+  </div>
+
+  <!-- SOC -->
+  <div id="screen-soc" class="card" style="display:none">
+    <div class="step-badge">STEP 2 / 2 — SOC（首尾一貫感覚）</div>
+    <h1>SOCスコア</h1>
+    <p class="desc">各質問について1〜7の中でもっともあてはまる数字を選択してください。</p>
+    <div class="progress-wrap">
+      <div class="progress-label" id="soc-progress-label">ANSWERED 0 / 13</div>
+      <div class="progress-bar"><div class="progress-fill" id="soc-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div id="soc-questions"></div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="screen-loading" class="card" style="display:none">
+    <span class="loading-icon">🌿</span>
+    <div style="text-align:center;font-weight:700;color:#2e7d32;letter-spacing:0.1em;">ANALYZING...</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result" class="card" style="display:none">
+    <div class="step-badge">FINAL RESULT</div>
+    <h1>チェック結果</h1>
+
+    <div class="result-section">
+      <div class="result-title">BRS — 回復力スコア</div>
+      <div class="result-score">
+        <span id="r-brs-total">0</span>
+        <span style="font-size:0.9rem;color:#388e3c;margin-left:4px;">点</span>
+        <span style="font-size:0.9rem;color:#81c784;margin-left:8px;">（平均 <span id="r-brs-avg">0.00</span>点）</span>
+      </div>
+      <div id="r-brs-judge" class="result-judge">-</div>
+    </div>
+    <hr class="divider">
+    <div class="result-section">
+      <div class="result-title">SOC — 首尾一貫感覚スコア</div>
+      <div class="result-score">
+        <span id="r-soc-total">0</span>
+        <span style="font-size:0.9rem;color:#388e3c;margin-left:4px;">点</span>
+      </div>
+      <div id="r-soc-judge" class="result-judge">-</div>
+      <div class="sub-scores">
+        <div class="sub-score-item">
+          <div class="sub-score-label">把握可能感</div>
+          <div class="sub-score-value" id="r-soc-understand">-</div>
+        </div>
+        <div class="sub-score-item">
+          <div class="sub-score-label">処理可能感</div>
+          <div class="sub-score-value" id="r-soc-manage">-</div>
+        </div>
+        <div class="sub-score-item">
+          <div class="sub-score-label">意義づけ感</div>
+          <div class="sub-score-value" id="r-soc-meaning">-</div>
+        </div>
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="result-title">総合コメント</div>
+    <div class="comment-box" id="r-comment">-</div>
+
+    <div class="share-box">
+      <div class="share-box-title">🔗 結果を共有する</div>
+      <div class="share-box-desc">このURLを医師や担当者に送ることで詳細な結果を共有できます。</div>
+      <button class="copy-btn" id="copy-url-btn">結果URLをコピーする 🔗</button>
+      <div class="copy-msg" id="copy-msg">✅ コピーしました！</div>
+    </div>
+    <p class="note">※医療診断ではありません。気になる方は専門医にご相談ください。</p>
+    <button class="retry-btn" id="retry-btn">もう一度チェックする</button>
+  </div>
+
+</div>
+<script>
+const CHUNK = 2;
+let validatedCode = null;
+let savedScoreId = null;
+
+const brsQuestions = [
+  { text: '困難な出来事が起きても、すぐに立ち直ることができる。', reverse: false },
+  { text: 'ストレスが多い出来事から立ち直るのに、長くはかからない。', reverse: false },
+  { text: 'なにか不遇な出来事が起きた時に、立ち直るのは難しい。', reverse: true },
+  { text: 'ささいな問題があっても、たいていやり過ごせる。', reverse: false },
+  { text: '人生における遅れを取り戻すのに、時間がかかる。', reverse: true },
+  { text: 'つらい状況を通り抜けるのに、長い時間がかかる。', reverse: true }
+];
+const brsOptions = ['まったくあてはまらない','ややあてはまらない','どちらともいえない','ややあてはまる','かなりあてはまる'];
+
+const socQuestions = [
+  { text: '人生で起きる出来事が予期できない・混沌としていると感じるか？', reverse: true, factor: 'understand' },
+  { text: '身の回りの出来事や変化を理解できると感じるか？', reverse: false, factor: 'understand' },
+  { text: '自分の感情や考えがまとまらない（混乱する）ことがあるか？', reverse: true, factor: 'understand' },
+  { text: '今後の見通しが立たないと感じることがあるか？', reverse: true, factor: 'understand' },
+  { text: '予期せぬ困難が起きても、なんとかなる・解決策があると思えるか？', reverse: false, factor: 'manage' },
+  { text: '周囲の人々やリソース（助け）を頼りにできると感じるか？', reverse: false, factor: 'manage' },
+  { text: '不当なことや災難が起きた時、「なぜ自分だけが」と打ちのめされるか？', reverse: true, factor: 'manage' },
+  { text: '自分の役割や課題を適切にこなせていると感じるか？', reverse: false, factor: 'manage' },
+  { text: '日々の生活や仕事にやりがい・価値を感じているか？', reverse: false, factor: 'meaning' },
+  { text: '人生の中で起きる出来事には意味があると思えるか？', reverse: false, factor: 'meaning' },
+  { text: '関わっている物事に対して関心や情熱を持てているか？', reverse: false, factor: 'meaning' },
+  { text: '自分の人生を自分でコントロールできている感覚があるか？', reverse: false, factor: 'meaning' },
+  { text: '将来に対して希望や目標を持っているか？', reverse: false, factor: 'meaning' }
+];
+
+let brsAnswers = new Array(6).fill(null);
+let socAnswers = new Array(13).fill(null);
+let brsVisible = CHUNK, socVisible = CHUNK;
+
+function getLineUid() {
+  return document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('line_uid='))?.split('=')[1] || null;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const uid = getLineUid();
+  if (uid) {
+    document.getElementById('user-badge').style.display = 'block';
+    document.getElementById('line-login-btn').style.display = 'none';
+    document.getElementById('skip-btn').style.display = 'none';
+  }
+  document.getElementById('code-check-btn').addEventListener('click', validateCode);
+  document.getElementById('company-code').addEventListener('keydown', e => { if (e.key === 'Enter') validateCode(); });
+  document.getElementById('company-code').addEventListener('input', () => {
+    validatedCode = null;
+    document.getElementById('company-code').className = 'code-input';
+    document.getElementById('code-msg').textContent = '';
+  });
+});
+
+async function validateCode() {
+  const input = document.getElementById('company-code');
+  const code = input.value.trim().toUpperCase();
+  const msg = document.getElementById('code-msg');
+  if (!code) { msg.textContent = 'コードを入力してください'; msg.className = 'code-msg ng'; return; }
+  if (code.length !== 6) { msg.textContent = '6桁のコードを入力してください'; msg.className = 'code-msg ng'; return; }
+  msg.textContent = '照合中...'; msg.className = 'code-msg';
+  try {
+    const res = await fetch('/api/validate-code', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code })
+    });
+    const data = await res.json();
+    if (data.valid) {
+      validatedCode = code;
+      input.className = 'code-input valid';
+      msg.textContent = '✅ ' + (data.label || code) + ' のコードが確認されました';
+      msg.className = 'code-msg ok';
+    } else {
+      validatedCode = null;
+      input.className = 'code-input invalid';
+      msg.textContent = '❌ ' + (data.message || '無効なコードです');
+      msg.className = 'code-msg ng';
+    }
+  } catch(e) { msg.textContent = '照合に失敗しました。'; msg.className = 'code-msg ng'; }
+}
+
+function lineLogin() {
+  const age = document.getElementById('age-group').value;
+  if (!age) { alert('年代を選択してください'); return; }
+  const params = new URLSearchParams({
+    response_type: 'code', client_id: process.env.LINE_CHANNEL_ID || '',
+    redirect_uri: window.location.origin + '/api/line-callback',
+    state: Math.random().toString(36).substring(2), scope: 'profile'
+  });
+  window.location.href = 'https://access.line.me/oauth2/v2.1/authorize?' + params.toString();
+}
+
+function checkAgeAndStart() {
+  if (!document.getElementById('age-group').value) { alert('年代を選択してください'); return; }
+  startBRS();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function updateProgress(answers, total, labelId, fillId) {
+  const n = answers.filter(a => a !== null).length;
+  document.getElementById(labelId).textContent = 'ANSWERED ' + n + ' / ' + total;
+  document.getElementById(fillId).style.width = (n/total*100)+'%';
+}
+
+// ===== BRS =====
+function renderBRSQuestion(i) {
+  const q = brsQuestions[i];
+  const block = document.createElement('div');
+  block.className = 'question-block' + (brsAnswers[i] !== null ? ' answered' : '');
+  block.id = 'brs-q-' + i;
+  let html = '<div class="q-num">Q' + (i+1) + '</div>';
+  if (q.reverse) html += '<div class="q-reverse">⚠️ 逆転項目</div>';
+  html += '<div class="q-text">' + q.text + '</div>';
+  html += '<div class="options-5">' + brsOptions.map((o, j) =>
+    '<button class="opt-btn' + (brsAnswers[i] === j+1 ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+(j+1)+'">' + o + '</button>'
+  ).join('') + '</div>';
+  block.innerHTML = html;
+  document.getElementById('brs-questions').appendChild(block);
+}
+
+function startBRS() {
+  brsVisible = CHUNK; showScreen('screen-brs');
+  document.getElementById('brs-questions').innerHTML = '';
+  for (let i = 0; i < Math.min(brsVisible, 6); i++) renderBRSQuestion(i);
+}
+
+document.getElementById('brs-questions').addEventListener('click', e => {
+  const btn = e.target.closest('[data-qi]'); if (!btn) return;
+  const qi = parseInt(btn.dataset.qi), val = parseInt(btn.dataset.val);
+  brsAnswers[qi] = val;
+  btn.closest('.options-5').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  btn.closest('.question-block').classList.add('answered');
+  updateProgress(brsAnswers, 6, 'brs-progress-label', 'brs-progress-fill');
+  if (brsAnswers.filter(a=>a!==null).length === 6) { setTimeout(startSOC, 400); return; }
+  if (brsAnswers.slice(0, brsVisible).filter(a=>a!==null).length === brsVisible && brsVisible < 6) {
+    const nv = Math.min(brsVisible + CHUNK, 6);
+    for (let i = brsVisible; i < nv; i++) renderBRSQuestion(i);
+    brsVisible = nv;
+    setTimeout(() => {
+      const nb = document.getElementById('brs-q-' + (brsVisible - CHUNK));
+      if (nb) nb.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 100);
+  }
+});
+
+// ===== SOC =====
+function renderSOCQuestion(i) {
+  const q = socQuestions[i];
+  const block = document.createElement('div');
+  block.className = 'question-block' + (socAnswers[i] !== null ? ' answered' : '');
+  block.id = 'soc-q-' + i;
+  let html = '<div class="q-num">Q' + (i+1) + '</div>';
+  html += '<div class="q-text">' + q.text + '</div>';
+  html += '<div class="soc-scale">';
+  for (let v = 1; v <= 7; v++) {
+    html += '<button class="soc-btn' + (socAnswers[i] === v ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+v+'">' + v + '</button>';
+  }
+  html += '</div>';
+  html += '<div class="soc-scale-label"><span>全く思わない</span><span>非常に強く思う</span></div>';
+  block.innerHTML = html;
+  document.getElementById('soc-questions').appendChild(block);
+}
+
+function startSOC() {
+  socVisible = CHUNK; showScreen('screen-soc');
+  document.getElementById('soc-questions').innerHTML = '';
+  for (let i = 0; i < Math.min(socVisible, 13); i++) renderSOCQuestion(i);
+}
+
+document.getElementById('soc-questions').addEventListener('click', e => {
+  const btn = e.target.closest('[data-qi]'); if (!btn) return;
+  const qi = parseInt(btn.dataset.qi), val = parseInt(btn.dataset.val);
+  socAnswers[qi] = val;
+  btn.closest('.soc-scale').querySelectorAll('.soc-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  btn.closest('.question-block').classList.add('answered');
+  updateProgress(socAnswers, 13, 'soc-progress-label', 'soc-progress-fill');
+  if (socAnswers.filter(a=>a!==null).length === 13) { setTimeout(showResult, 400); return; }
+  if (socAnswers.slice(0, socVisible).filter(a=>a!==null).length === socVisible && socVisible < 13) {
+    const nv = Math.min(socVisible + CHUNK, 13);
+    for (let i = socVisible; i < nv; i++) renderSOCQuestion(i);
+    socVisible = nv;
+    setTimeout(() => {
+      const nb = document.getElementById('soc-q-' + (socVisible - CHUNK));
+      if (nb) nb.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 100);
+  }
+});
+
+// ===== 採点 =====
+function calcBRS() {
+  const scored = brsAnswers.map((v, i) => brsQuestions[i].reverse ? (6 - v) : v);
+  const total = scored.reduce((s,v) => s+v, 0);
+  const avg = total / 6;
+  let judge, cls;
+  if (avg >= 3.6) { judge = '高レジリエンス'; cls = 'judge-high'; }
+  else if (avg >= 3.0) { judge = '標準レジリエンス'; cls = 'judge-mid'; }
+  else { judge = '低レジリエンス'; cls = 'judge-low'; }
+  return { total, avg: avg.toFixed(2), judge, cls };
+}
+
+function calcSOC() {
+  const scored = socAnswers.map((v, i) => socQuestions[i].reverse ? (8 - v) : v);
+  const total = scored.reduce((s,v) => s+v, 0);
+  const understand = scored.filter((_, i) => socQuestions[i].factor === 'understand').reduce((s,v) => s+v, 0);
+  const manage = scored.filter((_, i) => socQuestions[i].factor === 'manage').reduce((s,v) => s+v, 0);
+  const meaning = scored.filter((_, i) => socQuestions[i].factor === 'meaning').reduce((s,v) => s+v, 0);
+  let judge, cls;
+  if (total >= 68) { judge = '高SOC'; cls = 'judge-high'; }
+  else if (total >= 53) { judge = '中SOC'; cls = 'judge-mid'; }
+  else { judge = '低SOC'; cls = 'judge-low'; }
+  return { total, understand, manage, meaning, judge, cls };
+}
+
+function makeComment(brs, soc) {
+  const b = brs.avg >= 3.6 ? 'high' : brs.avg >= 3.0 ? 'mid' : 'low';
+  const s = soc.total >= 68 ? 'high' : soc.total >= 53 ? 'mid' : 'low';
+  const comments = {
+    'high-high': 'レジリエンスとSOCがともに高く、ストレスに対して非常に強いコンディションです。\n現在の生活習慣を維持しながら、定期的にセルフチェックを行いましょう。',
+    'high-mid': '回復力は高いですが、ストレスの意味づけや対処感にやや波があります。\n日々の出来事に意味を見出す習慣を意識しましょう。',
+    'high-low': '回復力はありますが、ストレスを整理・対処する感覚が弱まっています。\n信頼できる人への相談や、生活リズムの見直しを検討してください。',
+    'mid-high': 'ストレスの意味づけ・対処感は高く安定していますが、回復にやや時間がかかることがあります。\n十分な休息と睡眠を心がけましょう。',
+    'mid-mid': '標準的なストレス耐性です。状況によって波が出ることがありますが、適切なサポートで改善できます。\n趣味や運動など気分転換の習慣をつけましょう。',
+    'mid-low': 'ストレスへの対処感と回復力がやや低下しています。\n早めに信頼できる人や専門家に相談されることをお勧めします。',
+    'low-high': 'ストレスの意味づけはできていますが、回復に時間がかかっています。\nゆっくり休む時間を確保し、無理をしないようにしましょう。',
+    'low-mid': '回復力と対処感の両方に注意が必要です。\n専門家（産業医・カウンセラー等）への相談を検討してください。',
+    'low-low': 'ストレスへの耐性と回復力がともに低下しています。\nできるだけ早めに産業医・メンタルヘルス専門家にご相談されることをお勧めします。'
+  };
+  return comments[b + '-' + s] || '';
+}
+
+async function showResult() {
+  showScreen('screen-loading');
+  const brs = calcBRS();
+  const soc = calcSOC();
+  const comment = makeComment(brs, soc);
+  const ageGroup = document.getElementById('age-group').value;
+
+  const saveRes = await fetch('/api/save-stress', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      brs_total: brs.total, brs_avg: parseFloat(brs.avg), brs_judge: brs.judge,
+      soc_total: soc.total, soc_judge: soc.judge,
+      soc_understand: soc.understand, soc_manage: soc.manage, soc_meaning: soc.meaning,
+      age_group: ageGroup,
+      company_code: validatedCode || null,
+      brs_answers: brsAnswers,
+      soc_answers: socAnswers
+    })
+  });
+  const saveData = await saveRes.json();
+  if (saveData.id) savedScoreId = saveData.id;
+
+  setTimeout(() => {
+    document.getElementById('r-brs-total').textContent = brs.total;
+    document.getElementById('r-brs-avg').textContent = brs.avg;
+    const bj = document.getElementById('r-brs-judge');
+    bj.textContent = brs.judge; bj.className = 'result-judge ' + brs.cls;
+
+    document.getElementById('r-soc-total').textContent = soc.total;
+    const sj = document.getElementById('r-soc-judge');
+    sj.textContent = soc.judge; sj.className = 'result-judge ' + soc.cls;
+    document.getElementById('r-soc-understand').textContent = soc.understand;
+    document.getElementById('r-soc-manage').textContent = soc.manage;
+    document.getElementById('r-soc-meaning').textContent = soc.meaning;
+    document.getElementById('r-comment').textContent = comment;
+    showScreen('screen-result');
+  }, 1500);
+}
+
+document.getElementById('start-btn').addEventListener('click', checkAgeAndStart);
+document.getElementById('line-login-btn').addEventListener('click', lineLogin);
+document.getElementById('skip-btn').addEventListener('click', checkAgeAndStart);
+document.getElementById('retry-btn').addEventListener('click', () => location.reload());
+document.getElementById('copy-url-btn').addEventListener('click', () => {
+  if (!savedScoreId) { alert('結果の保存が完了していません。'); return; }
+  const url = window.location.origin + '/?result=' + savedScoreId;
+  navigator.clipboard.writeText(url).then(() => {
+    document.getElementById('copy-msg').style.display = 'block';
+    setTimeout(() => document.getElementById('copy-msg').style.display = 'none', 3000);
+  });
+});
+</script>
+</body>
+</html>
