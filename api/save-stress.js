@@ -105,3 +105,21 @@ module.exports = async function handler(req, res) {
           question_no: i + 1,
           question_text: socQList[i],
           answer_value: val,
+          answer_label: val + '点'
+        })
+      })
+    }
+
+    if (details.length > 0) {
+      const { error: detailError } = await supabase
+        .from('stress_details')
+        .insert(details)
+      if (detailError) console.error('stress_details error:', detailError)
+    }
+
+    res.status(200).json({ ok: true, id: scoreId })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+}
