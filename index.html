@@ -24,8 +24,7 @@
     .question-block.answered { border-color: #66bb6a; background: #f1f8e9; }
     .q-num { font-size: 0.72rem; color: #388e3c; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.08em; }
     .q-text { font-size: 0.95rem; font-weight: 700; color: #1b5e20; line-height: 1.6; margin-bottom: 14px; }
-    .q-reverse { font-size: 0.72rem; color: #e65100; background: #fff3e0; border: 1px solid #ffcc02; border-radius: 4px; padding: 2px 8px; margin-bottom: 8px; display: inline-block; }
-    .options-5, .options-7 { display: flex; flex-direction: column; gap: 7px; }
+    .options-5 { display: flex; flex-direction: column; gap: 7px; }
     .opt-btn { background: white; border: 1px solid #c8e6c9; border-radius: 8px; padding: 11px 14px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #388e3c; cursor: pointer; transition: all 0.18s; text-align: left; width: 100%; }
     .opt-btn:hover { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; }
     .opt-btn.selected { background: linear-gradient(135deg,#2e7d32,#66bb6a); border-color: #66bb6a; color: white; font-weight: 700; }
@@ -85,12 +84,12 @@
   <div id="screen-top" class="card">
     <div class="step-badge">STRESS & RESILIENCE CHECK</div>
     <h1>ストレス・<br>レジリエンスチェック</h1>
-    <p class="desc">BRS（回復力）とSOC（首尾一貫感覚）の2つの指標で、あなたのストレス耐性と回復力を総合的にチェックします。</p>
+    <p class="desc">BRS（回復力）とSOC（ストレス対処力）の2つの指標で、あなたのストレス耐性と回復力を総合的にチェックします。直感で一番当てはまるものを選んでみてください。</p>
     <div class="info-box">
       <div class="info-box-title">📋 チェックの流れ</div>
       <div class="info-box-body">
-        STEP 1｜BRS（6問・5段階評価）<br>
-        STEP 2｜SOC（13問・7段階評価）<br>
+        STEP 1｜BRS（回復力・6問）<br>
+        STEP 2｜SOC（ストレス対処力・13問）<br>
         RESULT｜総合判定
       </div>
     </div>
@@ -144,7 +143,7 @@
   <!-- BRS -->
   <div id="screen-brs" class="card" style="display:none">
     <div class="step-badge">STEP 1 / 2 — BRS（回復力）</div>
-    <h1>BRSスコア</h1>
+    <h1>BRS<br><span style="font-size:1rem;font-weight:700;color:#388e3c;">回復力チェック</span></h1>
     <p class="desc">各項目についてあてはまる程度を5段階で選択してください。</p>
     <div class="progress-wrap">
       <div class="progress-label" id="brs-progress-label">ANSWERED 0 / 6</div>
@@ -155,8 +154,8 @@
 
   <!-- SOC -->
   <div id="screen-soc" class="card" style="display:none">
-    <div class="step-badge">STEP 2 / 2 — SOC（首尾一貫感覚）</div>
-    <h1>SOCスコア</h1>
+    <div class="step-badge">STEP 2 / 2 — SOC（ストレス対処力）</div>
+    <h1>SOC<br><span style="font-size:1rem;font-weight:700;color:#388e3c;">ストレス対処力チェック</span></h1>
     <p class="desc">各質問について1〜7の中でもっともあてはまる数字を選択してください。</p>
     <div class="progress-wrap">
       <div class="progress-label" id="soc-progress-label">ANSWERED 0 / 13</div>
@@ -187,7 +186,7 @@
     </div>
     <hr class="divider">
     <div class="result-section">
-      <div class="result-title">SOC — 首尾一貫感覚スコア</div>
+      <div class="result-title">SOC — ストレス対処力スコア</div>
       <div class="result-score">
         <span id="r-soc-total">0</span>
         <span style="font-size:0.9rem;color:#388e3c;margin-left:4px;">点</span>
@@ -333,14 +332,12 @@ function updateProgress(answers, total, labelId, fillId) {
   document.getElementById(fillId).style.width = (n/total*100)+'%';
 }
 
-// ===== BRS =====
 function renderBRSQuestion(i) {
   const q = brsQuestions[i];
   const block = document.createElement('div');
   block.className = 'question-block' + (brsAnswers[i] !== null ? ' answered' : '');
   block.id = 'brs-q-' + i;
   let html = '<div class="q-num">Q' + (i+1) + '</div>';
-  if (q.reverse) html += '<div class="q-reverse">⚠️ 逆転項目</div>';
   html += '<div class="q-text">' + q.text + '</div>';
   html += '<div class="options-5">' + brsOptions.map((o, j) =>
     '<button class="opt-btn' + (brsAnswers[i] === j+1 ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+(j+1)+'">' + o + '</button>'
@@ -375,7 +372,6 @@ document.getElementById('brs-questions').addEventListener('click', e => {
   }
 });
 
-// ===== SOC =====
 function renderSOCQuestion(i) {
   const q = socQuestions[i];
   const block = document.createElement('div');
@@ -419,7 +415,6 @@ document.getElementById('soc-questions').addEventListener('click', e => {
   }
 });
 
-// ===== 採点 =====
 function calcBRS() {
   const scored = brsAnswers.map((v, i) => brsQuestions[i].reverse ? (6 - v) : v);
   const total = scored.reduce((s,v) => s+v, 0);
@@ -489,7 +484,6 @@ async function showResult() {
     document.getElementById('r-brs-avg').textContent = brs.avg;
     const bj = document.getElementById('r-brs-judge');
     bj.textContent = brs.judge; bj.className = 'result-judge ' + brs.cls;
-
     document.getElementById('r-soc-total').textContent = soc.total;
     const sj = document.getElementById('r-soc-judge');
     sj.textContent = soc.judge; sj.className = 'result-judge ' + soc.cls;
