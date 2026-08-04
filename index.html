@@ -7,79 +7,79 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(160deg,#f4faf1 0%,#fbfdf5 50%,#f1f9f6 100%); min-height: 100vh; padding: 16px; display: flex; align-items: flex-start; justify-content: center; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(160deg,#fafdf9 0%,#fdfdf9 50%,#f8fbf6 100%); min-height: 100vh; padding: 16px; display: flex; align-items: flex-start; justify-content: center; }
     .container { max-width: 480px; width: 100%; padding-top: 16px; padding-bottom: 40px; }
-    .card { background: white; border-radius: 28px; padding: 32px 26px; box-shadow: 0 10px 32px rgba(129,199,132,0.15); border: 1px solid #eaf5ea; }
+    .card { background: white; border-radius: 28px; padding: 32px 26px; box-shadow: 0 10px 32px rgba(129,199,132,0.12); border: 1px solid #f0f6ee; }
     .top-icon { text-align: center; font-size: 3rem; margin-bottom: 8px; }
-    .step-badge { display: inline-block; background: linear-gradient(135deg,#a5d6a7,#c5e1a5); color: #33691e; font-size: 0.75rem; font-weight: 700; padding: 6px 16px; border-radius: 99px; margin-bottom: 14px; letter-spacing: 0.05em; }
-    h1 { font-size: 1.4rem; font-weight: 900; color: #2e7d32; margin-bottom: 8px; line-height: 1.5; text-align: center; }
-    .desc { font-size: 0.85rem; color: #558b5e; line-height: 1.9; margin-bottom: 22px; text-align: center; }
-    .info-box { background: #f6faf1; border: 1px solid #e3f0dc; border-radius: 20px; padding: 18px; margin-bottom: 14px; }
-    .info-box-title { font-size: 0.8rem; font-weight: 700; color: #4c8c52; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .info-box-body { font-size: 0.83rem; color: #6a9971; line-height: 2.1; }
+    .step-badge { display: inline-block; background: linear-gradient(135deg,#b7ddb9,#d3e8c4); color: #4c7a4f; font-size: 0.75rem; font-weight: 700; padding: 6px 16px; border-radius: 99px; margin-bottom: 14px; letter-spacing: 0.05em; }
+    h1 { font-size: 1.4rem; font-weight: 900; color: #4c8452; margin-bottom: 8px; line-height: 1.5; text-align: center; }
+    .desc { font-size: 0.85rem; color: #7fa584; line-height: 1.9; margin-bottom: 22px; text-align: center; }
+    .info-box { background: #f8fbf5; border: 1px solid #edf4e8; border-radius: 20px; padding: 18px; margin-bottom: 14px; }
+    .info-box-title { font-size: 0.8rem; font-weight: 700; color: #6a9970; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .info-box-body { font-size: 0.83rem; color: #8fb096; line-height: 2.1; }
     .step-line { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
     .step-icon { font-size: 1rem; }
     .progress-wrap { margin-bottom: 22px; }
-    .progress-label { font-size: 0.78rem; color: #4c8c52; font-weight: 700; margin-bottom: 8px; }
-    .progress-bar { background: #eef5ea; border-radius: 99px; height: 9px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg,#a5d6a7,#c5e1a5); border-radius: 99px; transition: width 0.4s ease; }
-    .question-block { margin-bottom: 16px; border-radius: 22px; padding: 20px; background: #fbfdf8; border: 1px solid #edf5e8; transition: all 0.3s; }
-    .question-block.answered { border-color: #b6dfb8; background: #f4faf1; }
-    .q-num { font-size: 0.72rem; color: #7cb383; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
-    .q-text { font-size: 0.95rem; font-weight: 700; color: #33691e; line-height: 1.8; margin-bottom: 16px; }
+    .progress-label { font-size: 0.78rem; color: #6a9970; font-weight: 700; margin-bottom: 8px; }
+    .progress-bar { background: #f2f7ef; border-radius: 99px; height: 9px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg,#c1e0c4,#dcecc8); border-radius: 99px; transition: width 0.4s ease; }
+    .question-block { margin-bottom: 16px; border-radius: 22px; padding: 20px; background: #fcfdfb; border: 1px solid #f1f6ee; transition: all 0.3s; }
+    .question-block.answered { border-color: #cde6cf; background: #f8fbf5; }
+    .q-num { font-size: 0.72rem; color: #93bb99; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+    .q-text { font-size: 0.95rem; font-weight: 700; color: #4c7a4f; line-height: 1.8; margin-bottom: 16px; }
     .options-5 { display: flex; flex-direction: column; gap: 9px; }
-    .opt-btn { background: white; border: 1.5px solid #e3f0dc; border-radius: 16px; padding: 14px 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #6a9971; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%; display: flex; align-items: center; gap: 10px; }
-    .opt-btn:hover { background: #f6faf1; border-color: #b6dfb8; color: #2e7d32; }
-    .opt-btn.selected { background: linear-gradient(135deg,#a5d6a7,#c5e1a5); border-color: #c5e1a5; color: #1b5e20; font-weight: 700; box-shadow: 0 6px 16px rgba(165,214,167,0.4); }
+    .opt-btn { background: white; border: 1.5px solid #edf4e8; border-radius: 16px; padding: 14px 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #8fb096; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%; display: flex; align-items: center; gap: 10px; }
+    .opt-btn:hover { background: #f8fbf5; border-color: #cde6cf; color: #4c8452; }
+    .opt-btn.selected { background: linear-gradient(135deg,#c1e0c4,#dcecc8); border-color: #dcecc8; color: #3d6b41; font-weight: 700; box-shadow: 0 6px 16px rgba(193,224,196,0.4); }
     .opt-emoji { font-size: 1.1rem; }
-    .start-btn { width: 100%; padding: 18px; background: linear-gradient(135deg,#a5d6a7,#c5e1a5); color: #1b5e20; border: none; border-radius: 18px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 22px; transition: all 0.2s; box-shadow: 0 8px 20px rgba(165,214,167,0.35); }
+    .start-btn { width: 100%; padding: 18px; background: linear-gradient(135deg,#c1e0c4,#dcecc8); color: #3d6b41; border: none; border-radius: 18px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 22px; transition: all 0.2s; box-shadow: 0 8px 20px rgba(193,224,196,0.3); }
     .start-btn:hover { opacity: 0.92; transform: translateY(-2px); }
     .result-section { margin-bottom: 22px; }
     .result-icon { font-size: 1.4rem; margin-right: 6px; }
-    .result-title { font-size: 0.85rem; font-weight: 700; color: #4c8c52; margin-bottom: 10px; letter-spacing: 0.05em; display: flex; align-items: center; }
-    .result-score { font-size: 1.6rem; font-weight: 900; color: #2e7d32; }
+    .result-title { font-size: 0.85rem; font-weight: 700; color: #6a9970; margin-bottom: 10px; letter-spacing: 0.05em; display: flex; align-items: center; }
+    .result-score { font-size: 1.6rem; font-weight: 900; color: #4c8452; }
     .result-judge { display: inline-block; padding: 7px 18px; border-radius: 99px; font-size: 0.82rem; font-weight: 700; margin-top: 10px; }
-    .judge-high { background: #eef8ee; color: #388e3c; border: 1px solid #b6dfb8; }
-    .judge-mid { background: #fff9e8; color: #d19a1f; border: 1px solid #ffe6a1; }
-    .judge-low { background: #fdf0ee; color: #cc7d70; border: 1px solid #f6cfc7; }
-    .divider { border: none; border-top: 1px dashed #d9ecd4; margin: 24px 0; }
+    .judge-high { background: #f2f9f0; color: #4c8452; border: 1px solid #cde6cf; }
+    .judge-mid { background: #fffaef; color: #cd9f3e; border: 1px solid #f5e2ae; }
+    .judge-low { background: #fdf3f1; color: #cf8a7e; border: 1px solid #f5d5cd; }
+    .divider { border: none; border-top: 1px dashed #eaf2e4; margin: 24px 0; }
     .sub-scores { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-    .sub-score-item { flex: 1; min-width: 80px; background: #f6faf1; border: 1px solid #e3f0dc; border-radius: 18px; padding: 14px 10px; text-align: center; }
-    .sub-score-label { font-size: 0.7rem; color: #6a9971; font-weight: 700; margin-bottom: 6px; }
-    .sub-score-value { font-size: 1.2rem; font-weight: 900; color: #2e7d32; }
-    .comment-box { background: #f6faf1; border: 1px solid #e3f0dc; border-radius: 22px; padding: 20px; font-size: 0.88rem; color: #558b5e; line-height: 2.1; white-space: pre-wrap; }
-    .share-box { background: #f6faf1; border: 1px solid #cbe6b0; border-radius: 22px; padding: 20px; margin-top: 18px; }
-    .share-box-title { font-size: 0.82rem; font-weight: 700; color: #4c8c52; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-    .share-box-desc { font-size: 0.78rem; color: #6a9971; margin-bottom: 14px; line-height: 1.8; }
-    .copy-btn { width: 100%; padding: 15px; background: linear-gradient(135deg,#a5d6a7,#c5e1a5); color: #1b5e20; border: none; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
-    .copy-msg { font-size: 0.78rem; color: #4c8c52; text-align: center; margin-top: 10px; display: none; }
-    .retry-btn { width: 100%; margin-top: 14px; padding: 15px; background: transparent; color: #4c8c52; border: 1.5px solid #b6dfb8; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .retry-btn:hover { background: #f6faf1; }
-    .note { font-size: 0.75rem; color: #9dbb9f; text-align: center; margin-top: 18px; line-height: 1.8; }
+    .sub-score-item { flex: 1; min-width: 80px; background: #f8fbf5; border: 1px solid #edf4e8; border-radius: 18px; padding: 14px 10px; text-align: center; }
+    .sub-score-label { font-size: 0.7rem; color: #8fb096; font-weight: 700; margin-bottom: 6px; }
+    .sub-score-value { font-size: 1.2rem; font-weight: 900; color: #4c8452; }
+    .comment-box { background: #f8fbf5; border: 1px solid #edf4e8; border-radius: 22px; padding: 20px; font-size: 0.88rem; color: #7fa584; line-height: 2.1; white-space: pre-wrap; }
+    .share-box { background: #f8fbf5; border: 1px solid #dcecc8; border-radius: 22px; padding: 20px; margin-top: 18px; }
+    .share-box-title { font-size: 0.82rem; font-weight: 700; color: #6a9970; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .share-box-desc { font-size: 0.78rem; color: #8fb096; margin-bottom: 14px; line-height: 1.8; }
+    .copy-btn { width: 100%; padding: 15px; background: linear-gradient(135deg,#c1e0c4,#dcecc8); color: #3d6b41; border: none; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
+    .copy-msg { font-size: 0.78rem; color: #6a9970; text-align: center; margin-top: 10px; display: none; }
+    .retry-btn { width: 100%; margin-top: 14px; padding: 15px; background: transparent; color: #6a9970; border: 1.5px solid #cde6cf; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .retry-btn:hover { background: #f8fbf5; }
+    .note { font-size: 0.75rem; color: #aac6ad; text-align: center; margin-top: 18px; line-height: 1.8; }
     .loading-icon { font-size: 3.2rem; display: block; margin-bottom: 14px; text-align: center; animation: float 1.6s ease-in-out infinite; }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    .user-badge { background: #f6faf1; border: 1px solid #b6dfb8; border-radius: 16px; padding: 13px 16px; font-size: 0.82rem; color: #4c8c52; font-weight: 700; margin-bottom: 18px; display: none; text-align: center; }
+    .user-badge { background: #f8fbf5; border: 1px solid #cde6cf; border-radius: 16px; padding: 13px 16px; font-size: 0.82rem; color: #6a9970; font-weight: 700; margin-bottom: 18px; display: none; text-align: center; }
     .line-btn { width: 100%; padding: 16px; background: #06C755; color: white; border: none; border-radius: 18px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 14px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .line-btn:hover { opacity: 0.9; }
-    .skip-btn { width: 100%; padding: 13px; background: transparent; color: #9dbb9f; border: 1px solid #e3f0dc; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
-    .age-select { width: 100%; padding: 14px; background: #fbfdf8; border: 1.5px solid #e3f0dc; border-radius: 16px; color: #2e7d32; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; outline: none; cursor: pointer; appearance: none; }
+    .skip-btn { width: 100%; padding: 13px; background: transparent; color: #aac6ad; border: 1px solid #edf4e8; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    .age-select { width: 100%; padding: 14px; background: #fcfdfb; border: 1.5px solid #edf4e8; border-radius: 16px; color: #4c8452; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; outline: none; cursor: pointer; appearance: none; }
     .code-wrap { margin-bottom: 18px; }
-    .code-label { font-size: 0.82rem; font-weight: 700; color: #4c8c52; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .code-label { font-size: 0.82rem; font-weight: 700; color: #6a9970; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .code-row { display: flex; gap: 8px; }
-    .code-input { flex: 1; padding: 14px; background: #fbfdf8; border: 1.5px solid #e3f0dc; border-radius: 16px; color: #2e7d32; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; outline: none; text-transform: uppercase; letter-spacing: 0.1em; }
-    .code-input::placeholder { color: #c1dcc3; text-transform: none; letter-spacing: normal; }
-    .code-input.valid { border-color: #a5d6a7; }
-    .code-input.invalid { border-color: #eeb2a8; }
-    .code-btn { padding: 14px 18px; background: #a5d6a7; color: #1b5e20; border: none; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
-    .code-btn:hover { background: #91cc94; }
+    .code-input { flex: 1; padding: 14px; background: #fcfdfb; border: 1.5px solid #edf4e8; border-radius: 16px; color: #4c8452; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; outline: none; text-transform: uppercase; letter-spacing: 0.1em; }
+    .code-input::placeholder { color: #d3e5d5; text-transform: none; letter-spacing: normal; }
+    .code-input.valid { border-color: #c1e0c4; }
+    .code-input.invalid { border-color: #f0c2b8; }
+    .code-btn { padding: 14px 18px; background: #c1e0c4; color: #3d6b41; border: none; border-radius: 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .code-btn:hover { background: #b0d6b3; }
     .code-msg { font-size: 0.78rem; margin-top: 8px; }
-    .code-msg.ok { color: #4c8c52; }
-    .code-msg.ng { color: #cc7d70; }
+    .code-msg.ok { color: #6a9970; }
+    .code-msg.ng { color: #cf8a7e; }
     .soc-scale { display: flex; gap: 5px; flex-wrap: wrap; }
-    .soc-btn { flex: 1; min-width: 36px; text-align: center; padding: 12px 4px; background: white; border: 1.5px solid #e3f0dc; border-radius: 14px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; font-weight: 700; color: #6a9971; cursor: pointer; transition: all 0.2s; }
-    .soc-btn:hover { background: #f6faf1; border-color: #b6dfb8; }
-    .soc-btn.selected { background: linear-gradient(135deg,#a5d6a7,#c5e1a5); border-color: #c5e1a5; color: #1b5e20; box-shadow: 0 4px 12px rgba(165,214,167,0.35); }
-    .soc-scale-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: #9dbb9f; margin-top: 8px; }
+    .soc-btn { flex: 1; min-width: 36px; text-align: center; padding: 12px 4px; background: white; border: 1.5px solid #edf4e8; border-radius: 14px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; font-weight: 700; color: #8fb096; cursor: pointer; transition: all 0.2s; }
+    .soc-btn:hover { background: #f8fbf5; border-color: #cde6cf; }
+    .soc-btn.selected { background: linear-gradient(135deg,#c1e0c4,#dcecc8); border-color: #dcecc8; color: #3d6b41; box-shadow: 0 4px 12px rgba(193,224,196,0.35); }
+    .soc-scale-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: #aac6ad; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -102,7 +102,7 @@
 
     <!-- 年代選択 -->
     <div style="margin-bottom:16px;">
-      <div style="font-size:0.82rem;font-weight:700;color:#4c8c52;margin-bottom:8px;">📋 年代を選択してください</div>
+      <div style="font-size:0.82rem;font-weight:700;color:#6a9970;margin-bottom:8px;">📋 年代を選択してください</div>
       <select id="age-group" class="age-select">
         <option value="">--- 選択してください ---</option>
         <option value="20代前半">20代前半（20〜24歳）</option>
@@ -148,10 +148,7 @@
 
   <!-- BRS -->
   <div id="screen-brs" class="card" style="display:none">
-    <div class="top-icon">🌱</div>
-    <div style="text-align:center;"><span class="step-badge">STEP 1 / 2 — BRS</span></div>
-    <h1>回復力チェック</h1>
-    <p class="desc">各項目についてあてはまる程度を5段階で選んでください。</p>
+    <div class="top-icon" style="font-size:4rem;margin-bottom:20px;">🌱</div>
     <div class="progress-wrap">
       <div class="progress-label" id="brs-progress-label">ANSWERED 0 / 6</div>
       <div class="progress-bar"><div class="progress-fill" id="brs-progress-fill" style="width:0%"></div></div>
@@ -161,10 +158,7 @@
 
   <!-- SOC -->
   <div id="screen-soc" class="card" style="display:none">
-    <div class="top-icon">🍃</div>
-    <div style="text-align:center;"><span class="step-badge">STEP 2 / 2 — SOC</span></div>
-    <h1>ストレス対処力チェック</h1>
-    <p class="desc">1〜7の中でもっともあてはまる数字を選んでください。</p>
+    <div class="top-icon" style="font-size:4rem;margin-bottom:20px;">🍃</div>
     <div class="progress-wrap">
       <div class="progress-label" id="soc-progress-label">ANSWERED 0 / 13</div>
       <div class="progress-bar"><div class="progress-fill" id="soc-progress-fill" style="width:0%"></div></div>
@@ -175,7 +169,7 @@
   <!-- LOADING -->
   <div id="screen-loading" class="card" style="display:none">
     <span class="loading-icon">🌿</span>
-    <div style="text-align:center;font-weight:700;color:#4c8c52;">結果をまとめています...</div>
+    <div style="text-align:center;font-weight:700;color:#6a9970;">結果をまとめています...</div>
   </div>
 
   <!-- RESULT -->
@@ -188,8 +182,8 @@
       <div class="result-title"><span class="result-icon">🌱</span>BRS — 回復力スコア</div>
       <div class="result-score">
         <span id="r-brs-total">0</span>
-        <span style="font-size:0.9rem;color:#6a9971;margin-left:4px;">点</span>
-        <span style="font-size:0.9rem;color:#9dbb9f;margin-left:8px;">（平均 <span id="r-brs-avg">0.00</span>点）</span>
+        <span style="font-size:0.9rem;color:#8fb096;margin-left:4px;">点</span>
+        <span style="font-size:0.9rem;color:#aac6ad;margin-left:8px;">（平均 <span id="r-brs-avg">0.00</span>点）</span>
       </div>
       <div id="r-brs-judge" class="result-judge">-</div>
     </div>
@@ -198,7 +192,7 @@
       <div class="result-title"><span class="result-icon">🍃</span>SOC — ストレス対処力スコア</div>
       <div class="result-score">
         <span id="r-soc-total">0</span>
-        <span style="font-size:0.9rem;color:#6a9971;margin-left:4px;">点</span>
+        <span style="font-size:0.9rem;color:#8fb096;margin-left:4px;">点</span>
       </div>
       <div id="r-soc-judge" class="result-judge">-</div>
       <div class="sub-scores">
