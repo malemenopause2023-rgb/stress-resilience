@@ -10,7 +10,7 @@
     body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(160deg,#fafdf9 0%,#fdfdf9 50%,#f8fbf6 100%); min-height: 100vh; padding: 16px; display: flex; align-items: flex-start; justify-content: center; }
     .container { max-width: 480px; width: 100%; padding-top: 16px; padding-bottom: 40px; }
     .card { background: white; border-radius: 28px; padding: 32px 26px; box-shadow: 0 10px 32px rgba(129,199,132,0.12); border: 1px solid #f0f6ee; }
-    .top-icon { text-align: center; font-size: 3rem; margin-bottom: 8px; }
+    .top-icon { text-align: center; font-size: 4rem; margin-bottom: 12px; }
     .step-badge { display: inline-block; background: linear-gradient(135deg,#b7ddb9,#d3e8c4); color: #4c7a4f; font-size: 0.75rem; font-weight: 700; padding: 6px 16px; border-radius: 99px; margin-bottom: 14px; letter-spacing: 0.05em; }
     h1 { font-size: 1.4rem; font-weight: 900; color: #4c8452; margin-bottom: 8px; line-height: 1.5; text-align: center; }
     .desc { font-size: 0.85rem; color: #7fa584; line-height: 1.9; margin-bottom: 22px; text-align: center; }
@@ -28,10 +28,9 @@
     .q-num { font-size: 0.72rem; color: #93bb99; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
     .q-text { font-size: 0.95rem; font-weight: 700; color: #4c7a4f; line-height: 1.8; margin-bottom: 16px; }
     .options-5 { display: flex; flex-direction: column; gap: 9px; }
-    .opt-btn { background: white; border: 1.5px solid #edf4e8; border-radius: 16px; padding: 14px 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #8fb096; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%; display: flex; align-items: center; gap: 10px; }
+    .opt-btn { background: white; border: 1.5px solid #edf4e8; border-radius: 16px; padding: 14px 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #8fb096; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%; }
     .opt-btn:hover { background: #f8fbf5; border-color: #cde6cf; color: #4c8452; }
     .opt-btn.selected { background: linear-gradient(135deg,#c1e0c4,#dcecc8); border-color: #dcecc8; color: #3d6b41; font-weight: 700; box-shadow: 0 6px 16px rgba(193,224,196,0.4); }
-    .opt-emoji { font-size: 1.1rem; }
     .start-btn { width: 100%; padding: 18px; background: linear-gradient(135deg,#c1e0c4,#dcecc8); color: #3d6b41; border: none; border-radius: 18px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 22px; transition: all 0.2s; box-shadow: 0 8px 20px rgba(193,224,196,0.3); }
     .start-btn:hover { opacity: 0.92; transform: translateY(-2px); }
     .result-section { margin-bottom: 22px; }
@@ -148,7 +147,7 @@
 
   <!-- BRS -->
   <div id="screen-brs" class="card" style="display:none">
-    <div class="top-icon" style="font-size:4rem;margin-bottom:20px;">🌱</div>
+    <div class="top-icon" style="font-size:5rem;">🌱</div>
     <div class="progress-wrap">
       <div class="progress-label" id="brs-progress-label">ANSWERED 0 / 6</div>
       <div class="progress-bar"><div class="progress-fill" id="brs-progress-fill" style="width:0%"></div></div>
@@ -158,7 +157,7 @@
 
   <!-- SOC -->
   <div id="screen-soc" class="card" style="display:none">
-    <div class="top-icon" style="font-size:4rem;margin-bottom:20px;">🍃</div>
+    <div class="top-icon" style="font-size:5rem;">🍃</div>
     <div class="progress-wrap">
       <div class="progress-label" id="soc-progress-label">ANSWERED 0 / 13</div>
       <div class="progress-bar"><div class="progress-fill" id="soc-progress-fill" style="width:0%"></div></div>
@@ -239,11 +238,11 @@ const brsQuestions = [
   { text: 'つらい状況を通り抜けるのに、長い時間がかかる。', reverse: true }
 ];
 const brsOptions = [
-  { label: 'まったくあてはまらない', emoji: '😞' },
-  { label: 'ややあてはまらない', emoji: '🙁' },
-  { label: 'どちらともいえない', emoji: '😐' },
-  { label: 'ややあてはまる', emoji: '🙂' },
-  { label: 'かなりあてはまる', emoji: '😊' }
+  { label: 'まったくあてはまらない' },
+  { label: 'ややあてはまらない' },
+  { label: 'どちらともいえない' },
+  { label: 'ややあてはまる' },
+  { label: 'かなりあてはまる' }
 ];
 
 const socQuestions = [
@@ -349,7 +348,7 @@ function renderBRSQuestion(i) {
   let html = '<div class="q-num">🌱 Q' + (i+1) + '</div>';
   html += '<div class="q-text">' + q.text + '</div>';
   html += '<div class="options-5">' + brsOptions.map((o, j) =>
-    '<button class="opt-btn' + (brsAnswers[i] === j+1 ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+(j+1)+'"><span class="opt-emoji">'+o.emoji+'</span>' + o.label + '</button>'
+    '<button class="opt-btn' + (brsAnswers[i] === j+1 ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+(j+1)+'">' + o.label + '</button>'
   ).join('') + '</div>';
   block.innerHTML = html;
   document.getElementById('brs-questions').appendChild(block);
