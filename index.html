@@ -19,14 +19,13 @@
     .info-box-body { font-size: 0.83rem; color: #8fb096; line-height: 2.1; }
     .step-line { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
     .step-icon { font-size: 1rem; }
-    .progress-wrap { margin-bottom: 22px; }
-    .progress-label { font-size: 0.78rem; color: #6a9970; font-weight: 700; margin-bottom: 8px; }
+    .progress-wrap { margin-bottom: 24px; }
+    .progress-label { font-size: 0.78rem; color: #6a9970; font-weight: 700; margin-bottom: 8px; text-align: center; }
     .progress-bar { background: #f2f7ef; border-radius: 99px; height: 9px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg,#c1e0c4,#dcecc8); border-radius: 99px; transition: width 0.4s ease; }
-    .question-block { margin-bottom: 16px; border-radius: 22px; padding: 20px; background: #fcfdfb; border: 1px solid #f1f6ee; transition: all 0.3s; }
-    .question-block.answered { border-color: #cde6cf; background: #f8fbf5; }
-    .q-num { font-size: 0.72rem; color: #93bb99; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
-    .q-text { font-size: 0.95rem; font-weight: 700; color: #4c7a4f; line-height: 1.8; margin-bottom: 16px; }
+    .question-block { border-radius: 22px; padding: 22px 20px; background: #fcfdfb; border: 1px solid #f1f6ee; min-height: 260px; display: flex; flex-direction: column; justify-content: center; }
+    .q-num { font-size: 0.75rem; color: #93bb99; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; justify-content: center; }
+    .q-text { font-size: 1.02rem; font-weight: 700; color: #4c7a4f; line-height: 1.8; margin-bottom: 20px; text-align: center; }
     .options-5 { display: flex; flex-direction: column; gap: 9px; }
     .opt-btn { background: white; border: 1.5px solid #edf4e8; border-radius: 16px; padding: 14px 16px; font-family: 'Noto Sans JP', sans-serif; font-size: 0.88rem; color: #8fb096; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%; }
     .opt-btn:hover { background: #f8fbf5; border-color: #cde6cf; color: #4c8452; }
@@ -149,20 +148,20 @@
   <div id="screen-brs" class="card" style="display:none">
     <div class="top-icon" style="font-size:5rem;">🌱</div>
     <div class="progress-wrap">
-      <div class="progress-label" id="brs-progress-label">ANSWERED 0 / 6</div>
+      <div class="progress-label" id="brs-progress-label">1 / 6</div>
       <div class="progress-bar"><div class="progress-fill" id="brs-progress-fill" style="width:0%"></div></div>
     </div>
-    <div id="brs-questions"></div>
+    <div id="brs-question-area"></div>
   </div>
 
   <!-- SOC -->
   <div id="screen-soc" class="card" style="display:none">
     <div class="top-icon" style="font-size:5rem;">🍃</div>
     <div class="progress-wrap">
-      <div class="progress-label" id="soc-progress-label">ANSWERED 0 / 13</div>
+      <div class="progress-label" id="soc-progress-label">1 / 13</div>
       <div class="progress-bar"><div class="progress-fill" id="soc-progress-fill" style="width:0%"></div></div>
     </div>
-    <div id="soc-questions"></div>
+    <div id="soc-question-area"></div>
   </div>
 
   <!-- LOADING -->
@@ -225,7 +224,6 @@
 
 </div>
 <script>
-const CHUNK = 2;
 let validatedCode = null;
 let savedScoreId = null;
 
@@ -237,13 +235,7 @@ const brsQuestions = [
   { text: '人生における遅れを取り戻すのに、時間がかかる。', reverse: true },
   { text: 'つらい状況を通り抜けるのに、長い時間がかかる。', reverse: true }
 ];
-const brsOptions = [
-  { label: 'まったくあてはまらない' },
-  { label: 'ややあてはまらない' },
-  { label: 'どちらともいえない' },
-  { label: 'ややあてはまる' },
-  { label: 'かなりあてはまる' }
-];
+const brsOptions = ['まったくあてはまらない','ややあてはまらない','どちらともいえない','ややあてはまる','かなりあてはまる'];
 
 const socQuestions = [
   { text: '人生で起きる出来事が予期できない・混沌としていると感じるか？', reverse: true, factor: 'understand' },
@@ -263,7 +255,8 @@ const socQuestions = [
 
 let brsAnswers = new Array(6).fill(null);
 let socAnswers = new Array(13).fill(null);
-let brsVisible = CHUNK, socVisible = CHUNK;
+let brsIndex = 0;
+let socIndex = 0;
 
 function getLineUid() {
   return document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('line_uid='))?.split('=')[1] || null;
@@ -334,94 +327,76 @@ function showScreen(id) {
   window.scrollTo(0, 0);
 }
 
-function updateProgress(answers, total, labelId, fillId) {
-  const n = answers.filter(a => a !== null).length;
-  document.getElementById(labelId).textContent = 'ANSWERED ' + n + ' / ' + total;
-  document.getElementById(fillId).style.width = (n/total*100)+'%';
-}
-
-function renderBRSQuestion(i) {
-  const q = brsQuestions[i];
-  const block = document.createElement('div');
-  block.className = 'question-block' + (brsAnswers[i] !== null ? ' answered' : '');
-  block.id = 'brs-q-' + i;
-  let html = '<div class="q-num">🌱 Q' + (i+1) + '</div>';
-  html += '<div class="q-text">' + q.text + '</div>';
-  html += '<div class="options-5">' + brsOptions.map((o, j) =>
-    '<button class="opt-btn' + (brsAnswers[i] === j+1 ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+(j+1)+'">' + o.label + '</button>'
-  ).join('') + '</div>';
-  block.innerHTML = html;
-  document.getElementById('brs-questions').appendChild(block);
-}
-
+// ===== BRS：1問ずつ =====
 function startBRS() {
-  brsVisible = CHUNK; showScreen('screen-brs');
-  document.getElementById('brs-questions').innerHTML = '';
-  for (let i = 0; i < Math.min(brsVisible, 6); i++) renderBRSQuestion(i);
+  brsIndex = 0;
+  showScreen('screen-brs');
+  renderBRSQuestion();
 }
 
-document.getElementById('brs-questions').addEventListener('click', e => {
-  const btn = e.target.closest('[data-qi]'); if (!btn) return;
-  const qi = parseInt(btn.dataset.qi), val = parseInt(btn.dataset.val);
-  brsAnswers[qi] = val;
-  btn.closest('.options-5').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  btn.closest('.question-block').classList.add('answered');
-  updateProgress(brsAnswers, 6, 'brs-progress-label', 'brs-progress-fill');
-  if (brsAnswers.filter(a=>a!==null).length === 6) { setTimeout(startSOC, 400); return; }
-  if (brsAnswers.slice(0, brsVisible).filter(a=>a!==null).length === brsVisible && brsVisible < 6) {
-    const nv = Math.min(brsVisible + CHUNK, 6);
-    for (let i = brsVisible; i < nv; i++) renderBRSQuestion(i);
-    brsVisible = nv;
-    setTimeout(() => {
-      const nb = document.getElementById('brs-q-' + (brsVisible - CHUNK));
-      if (nb) nb.scrollIntoView({behavior:'smooth',block:'start'});
-    }, 100);
-  }
-});
+function renderBRSQuestion() {
+  const q = brsQuestions[brsIndex];
+  document.getElementById('brs-progress-label').textContent = (brsIndex + 1) + ' / 6';
+  document.getElementById('brs-progress-fill').style.width = ((brsIndex) / 6 * 100) + '%';
 
-function renderSOCQuestion(i) {
-  const q = socQuestions[i];
-  const block = document.createElement('div');
-  block.className = 'question-block' + (socAnswers[i] !== null ? ' answered' : '');
-  block.id = 'soc-q-' + i;
-  let html = '<div class="q-num">🍃 Q' + (i+1) + '</div>';
+  const area = document.getElementById('brs-question-area');
+  let html = '<div class="question-block">';
+  html += '<div class="q-num">🌱 Q' + (brsIndex + 1) + '</div>';
+  html += '<div class="q-text">' + q.text + '</div>';
+  html += '<div class="options-5">' + brsOptions.map((label, j) =>
+    '<button class="opt-btn" data-val="' + (j+1) + '">' + label + '</button>'
+  ).join('') + '</div>';
+  html += '</div>';
+  area.innerHTML = html;
+
+  area.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      brsAnswers[brsIndex] = parseInt(btn.dataset.val);
+      document.getElementById('brs-progress-fill').style.width = ((brsIndex + 1) / 6 * 100) + '%';
+      setTimeout(() => {
+        brsIndex++;
+        if (brsIndex >= 6) { startSOC(); } else { renderBRSQuestion(); }
+      }, 250);
+    });
+  });
+}
+
+// ===== SOC：1問ずつ =====
+function startSOC() {
+  socIndex = 0;
+  showScreen('screen-soc');
+  renderSOCQuestion();
+}
+
+function renderSOCQuestion() {
+  const q = socQuestions[socIndex];
+  document.getElementById('soc-progress-label').textContent = (socIndex + 1) + ' / 13';
+  document.getElementById('soc-progress-fill').style.width = ((socIndex) / 13 * 100) + '%';
+
+  const area = document.getElementById('soc-question-area');
+  let html = '<div class="question-block">';
+  html += '<div class="q-num">🍃 Q' + (socIndex + 1) + '</div>';
   html += '<div class="q-text">' + q.text + '</div>';
   html += '<div class="soc-scale">';
   for (let v = 1; v <= 7; v++) {
-    html += '<button class="soc-btn' + (socAnswers[i] === v ? ' selected' : '') + '" data-qi="'+i+'" data-val="'+v+'">' + v + '</button>';
+    html += '<button class="soc-btn" data-val="' + v + '">' + v + '</button>';
   }
   html += '</div>';
   html += '<div class="soc-scale-label"><span>全く思わない</span><span>非常に強く思う</span></div>';
-  block.innerHTML = html;
-  document.getElementById('soc-questions').appendChild(block);
-}
+  html += '</div>';
+  area.innerHTML = html;
 
-function startSOC() {
-  socVisible = CHUNK; showScreen('screen-soc');
-  document.getElementById('soc-questions').innerHTML = '';
-  for (let i = 0; i < Math.min(socVisible, 13); i++) renderSOCQuestion(i);
+  area.querySelectorAll('.soc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      socAnswers[socIndex] = parseInt(btn.dataset.val);
+      document.getElementById('soc-progress-fill').style.width = ((socIndex + 1) / 13 * 100) + '%';
+      setTimeout(() => {
+        socIndex++;
+        if (socIndex >= 13) { showResult(); } else { renderSOCQuestion(); }
+      }, 250);
+    });
+  });
 }
-
-document.getElementById('soc-questions').addEventListener('click', e => {
-  const btn = e.target.closest('[data-qi]'); if (!btn) return;
-  const qi = parseInt(btn.dataset.qi), val = parseInt(btn.dataset.val);
-  socAnswers[qi] = val;
-  btn.closest('.soc-scale').querySelectorAll('.soc-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  btn.closest('.question-block').classList.add('answered');
-  updateProgress(socAnswers, 13, 'soc-progress-label', 'soc-progress-fill');
-  if (socAnswers.filter(a=>a!==null).length === 13) { setTimeout(showResult, 400); return; }
-  if (socAnswers.slice(0, socVisible).filter(a=>a!==null).length === socVisible && socVisible < 13) {
-    const nv = Math.min(socVisible + CHUNK, 13);
-    for (let i = socVisible; i < nv; i++) renderSOCQuestion(i);
-    socVisible = nv;
-    setTimeout(() => {
-      const nb = document.getElementById('soc-q-' + (socVisible - CHUNK));
-      if (nb) nb.scrollIntoView({behavior:'smooth',block:'start'});
-    }, 100);
-  }
-});
 
 function calcBRS() {
   const scored = brsAnswers.map((v, i) => brsQuestions[i].reverse ? (6 - v) : v);
