@@ -10,7 +10,7 @@
     body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(160deg,#fafdf9 0%,#fdfdf9 50%,#f8fbf6 100%); min-height: 100vh; padding: 16px; display: flex; align-items: flex-start; justify-content: center; }
     .container { max-width: 480px; width: 100%; padding-top: 16px; padding-bottom: 40px; }
     .card { background: white; border-radius: 28px; padding: 32px 26px; box-shadow: 0 10px 32px rgba(129,199,132,0.12); border: 1px solid #f0f6ee; }
-    .top-icon { text-align: center; font-size: 4rem; margin-bottom: 12px; }
+    .top-icon { text-align: center; font-size: 4rem; margin-bottom: 12px; transition: all 0.3s ease; }
     .step-badge { display: inline-block; background: linear-gradient(135deg,#b7ddb9,#d3e8c4); color: #4c7a4f; font-size: 0.75rem; font-weight: 700; padding: 6px 16px; border-radius: 99px; margin-bottom: 14px; letter-spacing: 0.05em; }
     h1 { font-size: 1.4rem; font-weight: 900; color: #4c8452; margin-bottom: 8px; line-height: 1.5; text-align: center; }
     .desc { font-size: 0.85rem; color: #7fa584; line-height: 1.9; margin-bottom: 22px; text-align: center; }
@@ -19,10 +19,7 @@
     .info-box-body { font-size: 0.83rem; color: #8fb096; line-height: 2.1; }
     .step-line { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
     .step-icon { font-size: 1rem; }
-    .progress-wrap { margin-bottom: 24px; }
-    .progress-label { font-size: 0.78rem; color: #6a9970; font-weight: 700; margin-bottom: 8px; text-align: center; }
-    .progress-bar { background: #f2f7ef; border-radius: 99px; height: 9px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg,#c1e0c4,#dcecc8); border-radius: 99px; transition: width 0.4s ease; }
+    .q-progress-label { font-size: 0.78rem; color: #6a9970; font-weight: 700; margin-bottom: 20px; text-align: center; }
     .question-block { border-radius: 22px; padding: 22px 20px; background: #fcfdfb; border: 1px solid #f1f6ee; min-height: 260px; display: flex; flex-direction: column; justify-content: center; }
     .q-num { font-size: 0.75rem; color: #93bb99; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; justify-content: center; }
     .q-text { font-size: 1.02rem; font-weight: 700; color: #4c7a4f; line-height: 1.8; margin-bottom: 20px; text-align: center; }
@@ -85,7 +82,7 @@
 
   <!-- TOP -->
   <div id="screen-top" class="card">
-    <div class="top-icon">🌿</div>
+    <div class="top-icon">🌱</div>
     <div style="text-align:center;"><span class="step-badge">STRESS & RESILIENCE CHECK</span></div>
     <h1>ストレス・<br>レジリエンスチェック</h1>
     <p class="desc">BRS（回復力）とSOC（ストレス対処力）の2つの指標で、あなたのストレス耐性と回復力を総合的にチェックします。<br>直感で一番当てはまるものを選んでみてください。</p>
@@ -93,8 +90,8 @@
       <div class="info-box-title">📋 チェックの流れ</div>
       <div class="info-box-body">
         <div class="step-line"><span class="step-icon">🌱</span>STEP 1｜BRS（回復力・6問）</div>
-        <div class="step-line"><span class="step-icon">🍃</span>STEP 2｜SOC（ストレス対処力・13問）</div>
-        <div class="step-line"><span class="step-icon">💚</span>RESULT｜総合判定</div>
+        <div class="step-line"><span class="step-icon">🌿</span>STEP 2｜SOC（ストレス対処力・13問）</div>
+        <div class="step-line"><span class="step-icon">🌸</span>RESULT｜総合判定</div>
       </div>
     </div>
 
@@ -135,7 +132,7 @@
     </div>
 
     <div class="user-badge" id="user-badge">✅ LINEでログイン済み</div>
-    <button class="start-btn" id="start-btn">🌿 チェックを開始する</button>
+    <button class="start-btn" id="start-btn">🌱 チェックを開始する</button>
     <button class="line-btn" id="line-login-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.08 1.67 5.77 4.19 7.4L5.5 22l3.79-1.97C10.1 20.63 11.03 21 12 21c5.52 0 10-4.03 10-9s-4.48-9-10-9z"/></svg>
       LINEでログインして記録を残す
@@ -146,33 +143,27 @@
 
   <!-- BRS -->
   <div id="screen-brs" class="card" style="display:none">
-    <div class="top-icon" style="font-size:5rem;">🌱</div>
-    <div class="progress-wrap">
-      <div class="progress-label" id="brs-progress-label">1 / 6</div>
-      <div class="progress-bar"><div class="progress-fill" id="brs-progress-fill" style="width:0%"></div></div>
-    </div>
+    <div class="top-icon" id="brs-growth-icon" style="font-size:5rem;">🌱</div>
+    <div class="q-progress-label" id="brs-progress-label">1 / 6</div>
     <div id="brs-question-area"></div>
   </div>
 
   <!-- SOC -->
   <div id="screen-soc" class="card" style="display:none">
-    <div class="top-icon" style="font-size:5rem;">🍃</div>
-    <div class="progress-wrap">
-      <div class="progress-label" id="soc-progress-label">1 / 13</div>
-      <div class="progress-bar"><div class="progress-fill" id="soc-progress-fill" style="width:0%"></div></div>
-    </div>
+    <div class="top-icon" id="soc-growth-icon" style="font-size:5rem;">🌿</div>
+    <div class="q-progress-label" id="soc-progress-label">1 / 13</div>
     <div id="soc-question-area"></div>
   </div>
 
   <!-- LOADING -->
   <div id="screen-loading" class="card" style="display:none">
-    <span class="loading-icon">🌿</span>
+    <span class="loading-icon">🌸</span>
     <div style="text-align:center;font-weight:700;color:#6a9970;">結果をまとめています...</div>
   </div>
 
   <!-- RESULT -->
   <div id="screen-result" class="card" style="display:none">
-    <div class="top-icon">💚</div>
+    <div class="top-icon" style="font-size:5rem;">🌸</div>
     <div style="text-align:center;"><span class="step-badge">FINAL RESULT</span></div>
     <h1>チェック結果</h1>
 
@@ -187,7 +178,7 @@
     </div>
     <hr class="divider">
     <div class="result-section">
-      <div class="result-title"><span class="result-icon">🍃</span>SOC — ストレス対処力スコア</div>
+      <div class="result-title"><span class="result-icon">🌿</span>SOC — ストレス対処力スコア</div>
       <div class="result-score">
         <span id="r-soc-total">0</span>
         <span style="font-size:0.9rem;color:#8fb096;margin-left:4px;">点</span>
@@ -257,6 +248,16 @@ let brsAnswers = new Array(6).fill(null);
 let socAnswers = new Array(13).fill(null);
 let brsIndex = 0;
 let socIndex = 0;
+
+const growthIcons = ['🌱', '🌿', '🪴', '🌷', '🌸'];
+function updateGrowthIcon(elId, current, total) {
+  const pct = current / total;
+  let idx = Math.floor(pct * (growthIcons.length - 1));
+  if (idx >= growthIcons.length) idx = growthIcons.length - 1;
+  if (idx < 0) idx = 0;
+  const el = document.getElementById(elId);
+  if (el) el.textContent = growthIcons[idx];
+}
 
 function getLineUid() {
   return document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('line_uid='))?.split('=')[1] || null;
@@ -331,13 +332,13 @@ function showScreen(id) {
 function startBRS() {
   brsIndex = 0;
   showScreen('screen-brs');
+  updateGrowthIcon('brs-growth-icon', 0, 19);
   renderBRSQuestion();
 }
 
 function renderBRSQuestion() {
   const q = brsQuestions[brsIndex];
   document.getElementById('brs-progress-label').textContent = (brsIndex + 1) + ' / 6';
-  document.getElementById('brs-progress-fill').style.width = ((brsIndex) / 6 * 100) + '%';
 
   const area = document.getElementById('brs-question-area');
   let html = '<div class="question-block">';
@@ -352,7 +353,7 @@ function renderBRSQuestion() {
   area.querySelectorAll('.opt-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       brsAnswers[brsIndex] = parseInt(btn.dataset.val);
-      document.getElementById('brs-progress-fill').style.width = ((brsIndex + 1) / 6 * 100) + '%';
+      updateGrowthIcon('brs-growth-icon', brsIndex + 1, 19);
       setTimeout(() => {
         brsIndex++;
         if (brsIndex >= 6) { startSOC(); } else { renderBRSQuestion(); }
@@ -365,17 +366,17 @@ function renderBRSQuestion() {
 function startSOC() {
   socIndex = 0;
   showScreen('screen-soc');
+  updateGrowthIcon('soc-growth-icon', 6, 19);
   renderSOCQuestion();
 }
 
 function renderSOCQuestion() {
   const q = socQuestions[socIndex];
   document.getElementById('soc-progress-label').textContent = (socIndex + 1) + ' / 13';
-  document.getElementById('soc-progress-fill').style.width = ((socIndex) / 13 * 100) + '%';
 
   const area = document.getElementById('soc-question-area');
   let html = '<div class="question-block">';
-  html += '<div class="q-num">🍃 Q' + (socIndex + 1) + '</div>';
+  html += '<div class="q-num">🌿 Q' + (socIndex + 1) + '</div>';
   html += '<div class="q-text">' + q.text + '</div>';
   html += '<div class="soc-scale">';
   for (let v = 1; v <= 7; v++) {
@@ -389,7 +390,7 @@ function renderSOCQuestion() {
   area.querySelectorAll('.soc-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       socAnswers[socIndex] = parseInt(btn.dataset.val);
-      document.getElementById('soc-progress-fill').style.width = ((socIndex + 1) / 13 * 100) + '%';
+      updateGrowthIcon('soc-growth-icon', socIndex + 1 + 6, 19);
       setTimeout(() => {
         socIndex++;
         if (socIndex >= 13) { showResult(); } else { renderSOCQuestion(); }
